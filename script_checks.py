@@ -1,0 +1,7 @@
+t = open("d:/5tashabbus_bot/bot.py", encoding="utf-8").read()
+print("save_registration calls:", t.count("store.save_registration"))
+print("export handler:", t.count('Command("export", "excel")'))
+print("more:export branch:", t.count("more:export"))
+print("send_excel:", t.count("send_excel"))
+print("status_for:", t.count("status_for"))
+print("lines:", len(t.splitlines()))
