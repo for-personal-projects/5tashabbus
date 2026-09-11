@@ -59,15 +59,16 @@ class TashabbusApi:
         raise last
 
     def new_captcha(self, phone=None):
-        """Yangi captcha. phoneMode: config.CAPTCHA_PHONE - "null" (bezaf) yoki "profile"."""
+        """Yangi captcha. CAPTCHA_PHONE: "null" (bezaf) yoki "profile"."""
         self.request_id = make_guid()
         mode = config.CAPTCHA_PHONE
-        if mode == "profile":
-            phone_number = phone or "null"
+        if mode == "profile" and phone:
+            path = f"/Account/GenerateCaptcha?id={self.request_id}&phoneNumber={phone}"
+            phone_number = phone
         else:
-            phone_number = mode or "null"
-        path = f"/Account/GenerateCaptcha?id={self.request_id}&phoneNumber={phone_number}"
-        log.info("CAPTCHA new: uid-id=%s phoneNumber=%r mode=%r", self.request_id, phone_number, mode)
+            path = f"/Account/GenerateCaptcha?id={self.request_id}"
+            phone_number = None
+        log.info("CAPTCHA new: uid-id=%s phoneNumber=%s mode=%s", self.request_id, phone_number, mode)
         r = self._req("GET", path)
         r.raise_for_status()
         data = r.json()
